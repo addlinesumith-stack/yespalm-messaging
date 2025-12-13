@@ -5,178 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YesPalm - Anonymous Messaging</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f5f5f5;
-      color: #333;
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,#1a4d2e 0%,#2d6a4f 50%,#40916c 100%);
+      color:#2d3436;min-height:100vh;position:relative;overflow-x:hidden
     }
-    .container { max-width: 500px; margin: 0 auto; padding: 20px; }
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 30px 0;
-      border-bottom: 1px solid #e0e0e0;
+    .container{max-width:500px;margin:0 auto;padding:20px}
+    .header{text-align:center;margin-bottom:40px;padding:40px 0}
+    .header h1{font-size:48px;font-weight:700;margin-bottom:10px;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.3);letter-spacing:2px}
+    .palmyra-icon{font-size:60px;margin-bottom:15px;display:block;animation:sway 3s ease-in-out infinite}
+    @keyframes sway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(2deg)}}
+    .tagline{font-size:16px;color:#d4f1d4;font-weight:400;letter-spacing:1px}
+    .leaf{display:inline-block;margin:0 8px;color:#52b788}
+    .section{
+      background:rgba(255,255,255,.95);border-radius:20px;padding:40px;margin-bottom:20px;
+      box-shadow:0 10px 40px rgba(0,0,0,.15);border-left:5px solid #2d6a4f;position:relative;overflow:hidden
     }
-    .header h1 { font-size: 32px; font-weight: 700; margin-bottom: 10px; }
-    .tagline { font-size: 14px; color: #666; font-weight: 400; }
-    .section {
-      background: white;
-      border-radius: 8px;
-      padding: 30px;
-      margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    .section::before{content:'🌿';position:absolute;top:-20px;right:-20px;font-size:120px;opacity:.08}
+    .section h2{font-size:24px;margin-bottom:30px;font-weight:700;color:#1a4d2e;display:flex;align-items:center;gap:10px}
+    .auth-mode{text-align:center;margin-bottom:25px;font-size:14px;color:#52b788;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+    input[type="email"],input[type="text"],input[type="number"]{
+      width:100%;padding:14px;margin-bottom:20px;border:2px solid #d0f0d0;border-radius:10px;
+      font-size:14px;font-family:inherit;transition:all .3s ease;background:#f8fff8
     }
-    .tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 20px;
-      border-bottom: 2px solid #e0e0e0;
+    input:focus{outline:0;border-color:#2d6a4f;box-shadow:0 0 10px rgba(45,106,79,.2);background:#fff}
+    input::placeholder{color:#95a895}
+    button{
+      width:100%;padding:14px;background:linear-gradient(135deg,#2d6a4f 0%,#40916c 100%);color:#fff;border:none;
+      border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s ease;text-transform:uppercase;
+      letter-spacing:1px;margin-bottom:10px;box-shadow:0 4px 15px rgba(45,106,79,.3);position:relative;overflow:hidden
     }
-    .tab {
-      flex: 1;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-size: 14px;
-      font-weight: 600;
-      color: #666;
-      border-bottom: 3px solid transparent;
-      transition: all 0.2s;
-    }
-    .tab.active {
-      color: #000;
-      border-bottom-color: #000;
-    }
-    input[type="email"],
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-    input:focus { outline: none; border-color: #333; }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #000;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    button:hover { background: #222; }
-    .hidden { display: none !important; }
-    .chat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    .chat-header h2 { margin: 0; font-size: 18px; }
-    .room-info { font-size: 12px; color: #666; margin-top: 5px; }
-    .logout-btn { width: auto; padding: 8px 16px; font-size: 12px; }
-    .messages {
-      height: 300px;
-      overflow-y: auto;
-      margin-bottom: 20px;
-      padding: 15px 0;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      background: #fafafa;
-    }
-    .message {
-      padding: 12px 15px;
-      margin-bottom: 10px;
-      background: white;
-      border-left: 3px solid #000;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-    .message.sent { border-left-color: #666; background: #f9f9f9; }
-    .message-time { font-size: 11px; color: #999; margin-top: 5px; }
-    .empty-state { text-align: center; padding: 40px 20px; color: #999; font-size: 13px; }
-    .input-section { display: flex; gap: 10px; }
-    .input-section input { flex: 1; margin: 0; }
-    .send-btn { width: auto; padding: 12px 24px; }
-    .room-join {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 4px;
-      margin-bottom: 20px;
-    }
-    .room-join label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; }
-    .room-join-input { display: flex; gap: 10px; }
-    .room-join-input input { flex: 1; }
-    .join-btn { width: auto; padding: 10px 20px; font-size: 12px; }
+    button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,.4)}
+    .hidden{display:none!important}
+    .chat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:2px solid #d0f0d0}
+    .chat-header h2{margin:0;font-size:22px;color:#1a4d2e}
+    .user-info{font-size:12px;color:#52b788;margin-top:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    .room-info{font-size:13px;color:#2d6a4f;margin-top:5px;padding:8px;background:#f0f8f0;border-radius:8px;border-left:3px solid #52b788}
+    .logout-btn{width:auto;padding:10px 20px;font-size:12px;background:linear-gradient(135deg,#d62828 0%,#f77f00 100%)}
+    .messages{height:300px;overflow-y:auto;margin-bottom:20px;padding:15px 0;border:2px solid #d0f0d0;border-radius:10px;background:#fafff9}
+    .message{padding:12px 15px;margin:10px 5px;background:#fff;border-left:4px solid #2d6a4f;font-size:14px;line-height:1.5;border-radius:8px}
+    .message.sent{border-left-color:#95a895;background:#f0f8f0}
+    .message-time{font-size:11px;color:#95a895;margin-top:5px;font-weight:600}
+    .empty-state{text-align:center;padding:40px 20px;color:#95a895;font-size:14px}
+    .input-section{display:flex;gap:10px}
+    .input-section input{flex:1;margin:0}
+    .send-btn{width:auto;padding:14px 30px;font-size:14px}
+    .room-join{background:linear-gradient(135deg,#f0f8f0 0%,#e8f5e9 100%);padding:20px;border-radius:10px;margin-bottom:20px;border:2px solid #d0f0d0}
+    .room-join label{display:block;margin-bottom:12px;font-size:13px;font-weight:700;color:#1a4d2e;text-transform:uppercase;letter-spacing:.5px}
+    .room-join-input{display:flex;gap:10px}
+    .room-join-input input{flex:1}
+    .join-btn{width:auto;padding:12px 25px;font-size:13px}
+    .otp-input{text-align:center;font-size:32px;letter-spacing:10px;font-weight:700;font-family:'Courier New',monospace}
+    .otp-message{font-size:12px;color:#52b788;margin-bottom:15px;font-weight:600;text-transform:uppercase}
+    .resend{color:#2d6a4f;text-decoration:none;font-weight:700;cursor:pointer;font-size:12px}
+    .resend:hover{color:#40916c;text-decoration:underline}
+    @media (max-width:600px){.container{padding:10px}.section{padding:20px}.messages{height:250px}.header h1{font-size:36px}.palmyra-icon{font-size:50px}}
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
+      <div class="palmyra-icon">🌴</div>
       <h1>YesPalm</h1>
-      <p class="tagline">Anonymous Messaging Platform</p>
+      <p class="tagline"><span class="leaf">🍃</span>Anonymous Messaging<span class="leaf">🍃</span></p>
     </div>
 
-    <!-- Auth Section -->
     <div id="auth-section" class="section">
-      <div class="tabs">
-        <button class="tab active" onclick="showTab('signin')">Sign In</button>
-        <button class="tab" onclick="showTab('signup')">Sign Up</button>
+      <h2>🔐 Secure Login</h2>
+      <div class="auth-mode">Email Based OTP Authentication</div>
+      
+      <div id="email-screen">
+        <input type="email" id="login-email" placeholder="Enter your email address" maxlength="50">
+        <button onclick="sendOTP()">Send OTP</button>
       </div>
 
-      <!-- Sign In Tab -->
-      <div id="signin-tab">
-        <input type="email" id="signin-email" placeholder="Email" maxlength="50">
-        <button onclick="signIn()">SIGN IN</button>
-      </div>
-
-      <!-- Sign Up Tab -->
-      <div id="signup-tab" class="hidden">
-        <input type="email" id="signup-email" placeholder="Email" maxlength="50">
-        <input type="text" id="signup-name" placeholder="Your Name" maxlength="20">
-        <button onclick="signUp()">CREATE ACCOUNT</button>
+      <div id="otp-screen" class="hidden">
+        <div class="otp-message">Enter OTP sent to your email</div>
+        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6" class="otp-input">
+        <button onclick="verifyOTP()">Verify & Login</button>
+        <div style="margin-top:15px;text-align:center;"><span class="resend" onclick="sendOTP()">↻ Resend OTP</span></div>
       </div>
     </div>
 
-    <!-- Chat Section -->
     <div id="chat-section" class="section hidden">
       <div class="chat-header">
         <div>
-          <h2>Messages</h2>
-          <div class="room-info" id="user-info"></div>
+          <h2>💬 Messages</h2>
+          <div class="user-info" id="user-info"></div>
           <div class="room-info" id="room-id"></div>
         </div>
         <button class="logout-btn" onclick="logout()">Logout</button>
       </div>
 
-      <!-- Join Room Section -->
       <div class="room-join">
-        <label>Join Another Room</label>
+        <label>🌿 Join Friend's Room</label>
         <div class="room-join-input">
-          <input type="text" id="join-room-id" placeholder="Enter Room ID" maxlength="20">
+          <input type="text" id="join-room-id" placeholder="Enter Friend's Room ID" maxlength="20">
           <button class="join-btn" onclick="joinRoom()">JOIN</button>
         </div>
       </div>
 
-      <!-- Messages Display -->
       <div class="messages" id="messages-container">
-        <div class="empty-state">No messages yet. Share your room ID to receive messages.</div>
+        <div class="empty-state">🌱 No messages yet</div>
       </div>
 
-      <!-- Message Input -->
       <div class="input-section">
         <input type="text" id="message-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
         <button class="send-btn" onclick="sendMessage()">Send</button>
@@ -185,171 +118,21 @@
   </div>
 
   <script>
-    let currentUser = null;
-    let messages = [];
-    let currentRoom = null;
-    const STORAGE_KEY = 'yespalm_data';
-
-    function initApp() {
-      loadData();
-      if (currentUser) showChatSection();
-    }
-
-    function showTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById(tab + '-tab').classList.remove('hidden');
-      if (tab === 'signin') {
-        document.getElementById('signin-tab').previousElementSibling.querySelector('[onclick*="signin"]').classList.add('active');
-      } else {
-        document.getElementById('signup-tab').previousElementSibling.querySelector('[onclick*="signup"]').classList.add('active');
-      }
-      // Fix tab highlighting
-      event.target.classList.add('active');
-    }
-
-    function signUp() {
-      const email = document.getElementById('signup-email').value.trim();
-      const name = document.getElementById('signup-name').value.trim();
-      if (!email || !name) {
-        alert('Please enter email and name');
-        return;
-      }
-      if (!email.includes('@')) {
-        alert('Please enter a valid email');
-        return;
-      }
-      currentUser = {
-        id: generateRoomId(),
-        email: email,
-        name: name,
-        timestamp: new Date().getTime()
-      };
-      currentRoom = currentUser.id;
-      messages = [];
-      saveData();
-      showChatSection();
-    }
-
-    function signIn() {
-      const email = document.getElementById('signin-email').value.trim();
-      if (!email) {
-        alert('Please enter email');
-        return;
-      }
-      if (!email.includes('@')) {
-        alert('Please enter a valid email');
-        return;
-      }
-      // In a real app, this would check against a database
-      // For demo, we'll create a new user
-      currentUser = {
-        id: generateRoomId(),
-        email: email,
-        name: email.split('@')[0],
-        timestamp: new Date().getTime()
-      };
-      currentRoom = currentUser.id;
-      messages = [];
-      saveData();
-      showChatSection();
-    }
-
-    function generateRoomId() {
-      return 'ROOM' + Math.random().toString(36).substr(2, 9).toUpperCase();
-    }
-
-    function showChatSection() {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('chat-section').classList.remove('hidden');
-      document.getElementById('user-info').textContent = `Email: ${currentUser.email}`;
-      document.getElementById('room-id').textContent = `Your Room: ${currentRoom}`;
-      displayMessages();
-    }
-
-    function joinRoom() {
-      const roomId = document.getElementById('join-room-id').value.trim();
-      if (!roomId) {
-        alert('Please enter a room ID');
-        return;
-      }
-      currentRoom = roomId;
-      messages = [];
-      document.getElementById('join-room-id').value = '';
-      document.getElementById('room-id').textContent = `Connected to: ${currentRoom}`;
-      displayMessages();
-    }
-
-    function sendMessage() {
-      const input = document.getElementById('message-input');
-      const text = input.value.trim();
-      if (!text) return;
-      
-      messages.push({
-        id: Date.now(),
-        text: text,
-        timestamp: new Date(),
-        sender: 'user'
-      });
-      input.value = '';
-      displayMessages();
-      saveData();
-    }
-
-    function displayMessages() {
-      const container = document.getElementById('messages-container');
-      if (messages.length === 0) {
-        container.innerHTML = '<div class="empty-state">No messages yet. Share your room ID to receive messages.</div>';
-        return;
-      }
-      container.innerHTML = messages.map(msg => `
-        <div class="message ${msg.sender === 'user' ? 'sent' : ''}">
-          <div>${msg.text}</div>
-          <div class="message-time">${formatTime(msg.timestamp)}</div>
-        </div>
-      `).join('');
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function formatTime(date) {
-      return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function handleEnter(event) {
-      if (event.key === 'Enter') sendMessage();
-    }
-
-    function logout() {
-      currentUser = null;
-      currentRoom = null;
-      messages = [];
-      localStorage.removeItem(STORAGE_KEY);
-      document.getElementById('signin-email').value = '';
-      document.getElementById('signup-email').value = '';
-      document.getElementById('signup-name').value = '';
-      document.getElementById('auth-section').classList.remove('hidden');
-      document.getElementById('chat-section').classList.add('hidden');
-      showTab('signin');
-    }
-
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        user: currentUser,
-        messages: messages,
-        currentRoom: currentRoom
-      }));
-    }
-
-    function loadData() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const data = JSON.parse(saved);
-        currentUser = data.user;
-        messages = data.messages || [];
-        currentRoom = data.currentRoom || data.user?.id;
-      }
-    }
-
-    window.addEventListener('load', initApp);
+    let currentUser=null,messages=[],currentRoom=null,generatedOTP="",userEmail="",STORAGE_KEY='yespalm_data';
+    function initApp(){loadData();if(currentUser)showChatSection()}
+    function sendOTP(){const email=document.getElementById('login-email').value.trim();if(!email||!email.includes('@')){alert('Please enter valid email');return}userEmail=email;generatedOTP=Math.random().toString().substr(2,6);alert(`OTP sent to ${email}:\n\nYour OTP: ${generatedOTP}`);document.getElementById('email-screen').classList.add('hidden');document.getElementById('otp-screen').classList.remove('hidden')}
+    function verifyOTP(){const otp=document.getElementById('otp-input').value.trim();if(!otp||otp!==generatedOTP){alert('Invalid OTP');return}currentUser={id:generateRoomId(),email:userEmail,timestamp:new Date().getTime()};currentRoom=currentUser.id;messages=[];saveData();showChatSection()}
+    function generateRoomId(){return'ROOM'+Math.random().toString(36).substr(2,9).toUpperCase()}
+    function showChatSection(){document.getElementById('auth-section').classList.add('hidden');document.getElementById('chat-section').classList.remove('hidden');document.getElementById('user-info').textContent=`📧 ${currentUser.email}`;document.getElementById('room-id').textContent=`🏠 Your Room: ${currentRoom}`;displayMessages()}
+    function joinRoom(){const roomId=document.getElementById('join-room-id').value.trim();if(!roomId){alert('Please enter room ID');return}currentRoom=roomId;messages=[];document.getElementById('join-room-id').value='';document.getElementById('room-id').textContent=`🌐 Connected: ${currentRoom}`;displayMessages()}
+    function sendMessage(){const input=document.getElementById('message-input'),text=input.value.trim();if(!text)return;messages.push({id:Date.now(),text:text,timestamp:new Date(),sender:'user'});input.value='';displayMessages();saveData()}
+    function displayMessages(){const container=document.getElementById('messages-container');if(messages.length===0){container.innerHTML='<div class="empty-state">🌱 No messages yet. Share your room ID with friends!</div>';return}container.innerHTML=messages.map(msg=>`<div class="message ${msg.sender==='user'?'sent':''}"><div>${msg.text}</div><div class="message-time">${formatTime(msg.timestamp)}</div></div>`).join('');container.scrollTop=container.scrollHeight}
+    function formatTime(date){return new Date(date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+    function handleEnter(event){if(event.key==='Enter')sendMessage()}
+    function logout(){currentUser=null;currentRoom=null;messages=[];localStorage.removeItem(STORAGE_KEY);document.getElementById('login-email').value='';document.getElementById('otp-input').value='';document.getElementById('email-screen').classList.remove('hidden');document.getElementById('otp-screen').classList.add('hidden');document.getElementById('auth-section').classList.remove('hidden');document.getElementById('chat-section').classList.add('hidden')}
+    function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({user:currentUser,messages:messages,currentRoom:currentRoom}))}
+    function loadData(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);currentUser=data.user;messages=data.messages||[];currentRoom=data.currentRoom||data.user?.id}}
+    window.addEventListener('load',initApp);
   </script>
 </body>
 </html>
