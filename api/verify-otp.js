@@ -3,14 +3,12 @@ const { Redis } = require('@upstash/redis');
 // OTP Verification Endpoint
 // This endpoint verifies the OTP provided by the user
 // In production, OTPs should be stored in Redis with TTL (Time To Live)
-// For now, we'll use a simple in-memory store (NOT suitable for production)
 
 // Initialize Redis client with Upstash
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
-
 
 export default async function handler(req, res) {
   // CORS Headers
@@ -35,9 +33,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // In production, retrieve OTP from Redis
-    // const storedOTP = await redis.get(`otp:${email}`);
-    try {
     // Retrieve OTP from Redis
     const storedOTP = await redis.get(`otp:${email}`);
     console.log(`Retrieved OTP from Redis: ${storedOTP}`);
@@ -61,33 +56,10 @@ export default async function handler(req, res) {
     res.status(200).json({
       success: true,
       message: 'OTP verified successfully',
-      userId: Buffer.from(email).toString('base64') // Create a simple user ID
+      userId: Buffer.from(email).toString('base64')
     });
   } catch (error) {
     console.error('OTP Verification Error:', error);
     res.status(500).json({ error: 'Failed to verify OTP' });
   }
-}
-  
-    // OTP is valid - clean up and return success
-    delete storedOTPs[email];
-    
-    res.status(200).json({
-      success: true,
-      message: 'OTP verified successfully',
-      userId: Buffer.from(email).toString('base64') // Create a simple user ID
-    });
-
-  } catch (error) {
-    console.error('OTP Verification Error:', error);
-    res.status(500).json({ error: 'Failed to verify OTP' });
-  }
-}
-
-// Helper function to store OTP (called from send-otp.js)
-export function storeOTP(email, otp) {
-  storedOTPs[email] = {
-    code: otp,
-    createdAt: new Date()
-  };
 }
