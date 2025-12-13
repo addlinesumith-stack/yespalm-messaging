@@ -48,8 +48,7 @@ export default async function handler(req, res) {
     // Prepare email message
     const msg = {
       to: email,
-      from: process.env.SENDGRID_FROM_EMAIL || 'noreply@yespalm.com',
-      subject: 'YesPalm - Your OTP Code',
+    from: process.env.SENDGRID_FROM_EMAIL || 'addlinesumith@gmail.com',     subject: 'YesPalm - Your OTP Code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background-color: #2e7d32; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
