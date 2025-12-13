@@ -5,62 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YesPalm - Anonymous Messaging</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{
-      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:linear-gradient(135deg,#1a4d2e 0%,#2d6a4f 50%,#40916c 100%);
-      color:#2d3436;min-height:100vh;position:relative;overflow-x:hidden
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a4d2e 0%, #2d6a4f 50%, #40916c 100%);
+      color: #2d3436;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
     }
-    .container{max-width:500px;margin:0 auto;padding:20px}
-    .header{text-align:center;margin-bottom:40px;padding:40px 0}
-    .header h1{font-size:48px;font-weight:700;margin-bottom:10px;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.3);letter-spacing:2px}
-    .palmyra-icon{font-size:60px;margin-bottom:15px;display:block;animation:sway 3s ease-in-out infinite}
-    @keyframes sway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(2deg)}}
-    .tagline{font-size:16px;color:#d4f1d4;font-weight:400;letter-spacing:1px}
-    .leaf{display:inline-block;margin:0 8px;color:#52b788}
-    .section{
-      background:rgba(255,255,255,.95);border-radius:20px;padding:40px;margin-bottom:20px;
-      box-shadow:0 10px 40px rgba(0,0,0,.15);border-left:5px solid #2d6a4f;position:relative;overflow:hidden
+    .container { max-width: 500px; margin: 0 auto; padding: 20px; }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 40px 0;
     }
-    .section::before{content:'🌿';position:absolute;top:-20px;right:-20px;font-size:120px;opacity:.08}
-    .section h2{font-size:24px;margin-bottom:30px;font-weight:700;color:#1a4d2e;display:flex;align-items:center;gap:10px}
-    .auth-mode{text-align:center;margin-bottom:25px;font-size:14px;color:#52b788;font-weight:600;text-transform:uppercase;letter-spacing:1px}
-    input[type="email"],input[type="text"],input[type="number"]{
-      width:100%;padding:14px;margin-bottom:20px;border:2px solid #d0f0d0;border-radius:10px;
-      font-size:14px;font-family:inherit;transition:all .3s ease;background:#f8fff8
+    .header h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,.3);
+      letter-spacing: 2px;
     }
-    input:focus{outline:0;border-color:#2d6a4f;box-shadow:0 0 10px rgba(45,106,79,.2);background:#fff}
-    input::placeholder{color:#95a895}
-    button{
-      width:100%;padding:14px;background:linear-gradient(135deg,#2d6a4f 0%,#40916c 100%);color:#fff;border:none;
-      border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all .3s ease;text-transform:uppercase;
-      letter-spacing:1px;margin-bottom:10px;box-shadow:0 4px 15px rgba(45,106,79,.3);position:relative;overflow:hidden
+    .palmyra-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+      display: block;
+      animation: sway 3s ease-in-out infinite;
     }
-    button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(45,106,79,.4)}
-    .hidden{display:none!important}
-    .chat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;padding-bottom:20px;border-bottom:2px solid #d0f0d0}
-    .chat-header h2{margin:0;font-size:22px;color:#1a4d2e}
-    .user-info{font-size:12px;color:#52b788;margin-top:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-    .room-info{font-size:13px;color:#2d6a4f;margin-top:5px;padding:8px;background:#f0f8f0;border-radius:8px;border-left:3px solid #52b788}
-    .logout-btn{width:auto;padding:10px 20px;font-size:12px;background:linear-gradient(135deg,#d62828 0%,#f77f00 100%)}
-    .messages{height:300px;overflow-y:auto;margin-bottom:20px;padding:15px 0;border:2px solid #d0f0d0;border-radius:10px;background:#fafff9}
-    .message{padding:12px 15px;margin:10px 5px;background:#fff;border-left:4px solid #2d6a4f;font-size:14px;line-height:1.5;border-radius:8px}
-    .message.sent{border-left-color:#95a895;background:#f0f8f0}
-    .message-time{font-size:11px;color:#95a895;margin-top:5px;font-weight:600}
-    .empty-state{text-align:center;padding:40px 20px;color:#95a895;font-size:14px}
-    .input-section{display:flex;gap:10px}
-    .input-section input{flex:1;margin:0}
-    .send-btn{width:auto;padding:14px 30px;font-size:14px}
-    .room-join{background:linear-gradient(135deg,#f0f8f0 0%,#e8f5e9 100%);padding:20px;border-radius:10px;margin-bottom:20px;border:2px solid #d0f0d0}
-    .room-join label{display:block;margin-bottom:12px;font-size:13px;font-weight:700;color:#1a4d2e;text-transform:uppercase;letter-spacing:.5px}
-    .room-join-input{display:flex;gap:10px}
-    .room-join-input input{flex:1}
-    .join-btn{width:auto;padding:12px 25px;font-size:13px}
-    .otp-input{text-align:center;font-size:32px;letter-spacing:10px;font-weight:700;font-family:'Courier New',monospace}
-    .otp-message{font-size:12px;color:#52b788;margin-bottom:15px;font-weight:600;text-transform:uppercase}
-    .resend{color:#2d6a4f;text-decoration:none;font-weight:700;cursor:pointer;font-size:12px}
-    .resend:hover{color:#40916c;text-decoration:underline}
-    @media (max-width:600px){.container{padding:10px}.section{padding:20px}.messages{height:250px}.header h1{font-size:36px}.palmyra-icon{font-size:50px}}
+    @keyframes sway { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(2deg); } }
+    .tagline { font-size: 16px; color: #d4f1d4; font-weight: 400; letter-spacing: 1px; }
+    .leaf { display: inline-block; margin: 0 8px; color: #52b788; }
+    .section {
+      background: rgba(255,255,255,.95);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.15);
+      border-left: 5px solid #2d6a4f;
+      position: relative;
+      overflow: hidden;
+    }
+    .section::before { content: '🌿'; position: absolute; top: -20px; right: -20px; font-size: 120px; opacity: .08; }
+    .section h2 { font-size: 24px; margin-bottom: 30px; font-weight: 700; color: #1a4d2e; display: flex; align-items: center; gap: 10px; }
+    .auth-mode { text-align: center; margin-bottom: 25px; font-size: 14px; color: #52b788; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    input[type="email"], input[type="tel"], input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 2px solid #d0f0d0;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all .3s ease;
+      background: #f8fff8;
+    }
+    input:focus { outline: 0; border-color: #2d6a4f; box-shadow: 0 0 10px rgba(45,106,79,.2); background: #fff; }
+    input::placeholder { color: #95a895; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 15px rgba(45,106,79,.3);
+      position: relative;
+      overflow: hidden;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,106,79,.4); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .hidden { display: none !important; }
+    .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: 600; }
+    .status-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
+    .status-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
+    .status-info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #2196f3; }
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #d0f0d0;
+    }
+    .chat-header h2 { margin: 0; font-size: 22px; color: #1a4d2e; }
+    .user-info { font-size: 12px; color: #52b788; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
+    .room-info { font-size: 13px; color: #2d6a4f; margin-top: 5px; padding: 8px; background: #f0f8f0; border-radius: 8px; border-left: 3px solid #52b788; }
+    .logout-btn { width: auto; padding: 10px 20px; font-size: 12px; background: linear-gradient(135deg, #d62828 0%, #f77f00 100%); }
+    .messages { height: 300px; overflow-y: auto; margin-bottom: 20px; padding: 15px 0; border: 2px solid #d0f0d0; border-radius: 10px; background: #fafff9; }
+    .message { padding: 12px 15px; margin: 10px 5px; background: #fff; border-left: 4px solid #2d6a4f; font-size: 14px; line-height: 1.5; border-radius: 8px; }
+    .message.sent { border-left-color: #95a895; background: #f0f8f0; }
+    .message-time { font-size: 11px; color: #95a895; margin-top: 5px; font-weight: 600; }
+    .empty-state { text-align: center; padding: 40px 20px; color: #95a895; font-size: 14px; }
+    .input-section { display: flex; gap: 10px; }
+    .input-section input { flex: 1; margin: 0; }
+    .send-btn { width: auto; padding: 14px 30px; font-size: 14px; }
   </style>
 </head>
 <body>
@@ -75,63 +122,128 @@
       <h2>🔐 Secure Login</h2>
       <div class="auth-mode">Email Based OTP Authentication</div>
       
+      <div id="status-message"></div>
+
       <div id="email-screen">
-            <input type="tel" id="login-mobile" placeholder="Enter your mobile number" maxlength="15"        <button onclick="sendOTP()">Send OTP</button>
+        <input type="email" id="login-email" placeholder="Enter your email address">
+        <button onclick="sendOTP()">Send OTP</button>
       </div>
 
       <div id="otp-screen" class="hidden">
-        <div class="otp-message">Enter OTP sent to your mobile number</div>
-        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6" class="otp-input">
+        <div style="font-size: 12px; color: #52b788; margin-bottom: 15px; font-weight: 600; text-transform: uppercase;">✓ OTP sent to your email</div>
+        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6">
         <button onclick="verifyOTP()">Verify & Login</button>
-        <div style="margin-top:15px;text-align:center;"><span class="resend" onclick="sendOTP()">↻ Resend OTP</span></div>
-      </div>
-    </div>
-
-    <div id="chat-section" class="section hidden">
-      <div class="chat-header">
-        <div>
-          <h2>💬 Messages</h2>
-          <div class="user-info" id="user-info"></div>
-          <div class="room-info" id="room-id"></div>
+        <div style="margin-top: 15px; text-align: center;">
+          <span style="color: #2d6a4f; text-decoration: none; font-weight: 700; cursor: pointer; font-size: 12px;" onclick="sendOTP()">↻ Resend OTP</span>
         </div>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-      </div>
-
-      <div class="room-join">
-        <label>🌿 Join Friend's Room</label>
-        <div class="room-join-input">
-          <input type="text" id="join-room-id" placeholder="Enter Friend's Room ID" maxlength="20">
-          <button class="join-btn" onclick="joinRoom()">JOIN</button>
-        </div>
-      </div>
-
-      <div class="messages" id="messages-container">
-        <div class="empty-state">🌱 No messages yet</div>
-      </div>
-
-      <div class="input-section">
-        <input type="text" id="message-input" placeholder="Type your message..." onkeypress="handleEnter(event)">
-        <button class="send-btn" onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <script>
-    let currentUser=null,messages=[],currentRoom=null,generatedOTP="",userEmail="",STORAGE_KEY='yespalm_data';
-    function initApp(){loadData();if(currentUser)showChatSection()}
-    function sendOTP(){const mobile=document.getElementById('login-mobile').value.trim();if(!email||!email.includes('@')){alert('Please enter valid email');return}userEmail=email;generatedOTP=Math.random().toString().substr(2,6);alert(`OTP sent to ${email}:\n\nYour OTP: ${generatedOTP}`);document.getElementById('email-screen').classList.add('hidden');document.getElementById('otp-screen').classList.remove('hidden')}
-    function verifyOTP(){const otp=document.getElementById('otp-input').value.trim();if(!otp||otp!==generatedOTP){alert('Invalid OTP');return}currentUser={id:generateRoomId(),email:userEmail,timestamp:new Date().getTime()};currentRoom=currentUser.id;messages=[];saveData();showChatSection()}
-    function generateRoomId(){return'ROOM'+Math.random().toString(36).substr(2,9).toUpperCase()}
-    function showChatSection(){document.getElementById('auth-section').classList.add('hidden');document.getElementById('chat-section').classList.remove('hidden');document.getElementById('user-info').textContent=`📧 ${currentUser.email}`;document.getElementById('room-id').textContent=`🏠 Your Room: ${currentRoom}`;displayMessages()}
-    function joinRoom(){const roomId=document.getElementById('join-room-id').value.trim();if(!roomId){alert('Please enter room ID');return}currentRoom=roomId;messages=[];document.getElementById('join-room-id').value='';document.getElementById('room-id').textContent=`🌐 Connected: ${currentRoom}`;displayMessages()}
-    function sendMessage(){const input=document.getElementById('message-input'),text=input.value.trim();if(!text)return;messages.push({id:Date.now(),text:text,timestamp:new Date(),sender:'user'});input.value='';displayMessages();saveData()}
-    function displayMessages(){const container=document.getElementById('messages-container');if(messages.length===0){container.innerHTML='<div class="empty-state">🌱 No messages yet. Share your room ID with friends!</div>';return}container.innerHTML=messages.map(msg=>`<div class="message ${msg.sender==='user'?'sent':''}"><div>${msg.text}</div><div class="message-time">${formatTime(msg.timestamp)}</div></div>`).join('');container.scrollTop=container.scrollHeight}
-    function formatTime(date){return new Date(date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
-    function handleEnter(event){if(event.key==='Enter')sendMessage()}
-    function logout(){currentUser=null;currentRoom=null;messages=[];localStorage.removeItem(STORAGE_KEY);document.getElementById('login-mobile').value='';document.getElementById('otp-input').value='';document.getElementById('email-screen').classList.remove('hidden');document.getElementById('otp-screen').classList.add('hidden');document.getElementById('auth-section').classList.remove('hidden');document.getElementById('chat-section').classList.add('hidden')}
-    function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({user:currentUser,messages:messages,currentRoom:currentRoom}))}
-    function loadData(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);currentUser=data.user;messages=data.messages||[];currentRoom=data.currentRoom||data.user?.id}}
-    window.addEventListener('load',initApp);
+    let userEmail = '';
+    const API_BASE = '/api';
+
+    // ===== SECURE OTP SENDING =====
+    function sendOTP() {
+      const email = document.getElementById('login-email').value.trim();
+      const statusDiv = document.getElementById('status-message');
+      const btn = event.target;
+      
+      if (!email || !email.includes('@')) {
+        showStatus('❌ Please enter a valid email address', 'error');
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ Sending OTP...';
+      showStatus('');
+      
+      // Generate OTP on frontend (will be overridden by backend)
+      const frontendOTP = Math.random().toString().substr(2, 6);
+      
+      fetch(API_BASE + '/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, otp: frontendOTP })
+      })
+      .then(res => res.json())
+      .then(data => {
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+        
+        if (data.success) {
+          userEmail = email;
+          showStatus('✓ OTP sent to your email. Check your inbox.', 'success');
+          // Hide email screen, show OTP screen after 1 second
+          setTimeout(() => {
+            document.getElementById('email-screen').classList.add('hidden');
+            document.getElementById('otp-screen').classList.remove('hidden');
+          }, 500);
+        } else {
+          showStatus('❌ ' + (data.error || 'Failed to send OTP'), 'error');
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+        showStatus('❌ Network error: ' + err.message, 'error');
+        console.error('Error:', err);
+      });
+    }
+
+    // ===== SECURE OTP VERIFICATION =====
+    function verifyOTP() {
+      const otp = document.getElementById('otp-input').value.trim();
+      const btn = event.target;
+      
+      if (!otp || otp.length !== 6) {
+        showStatus('❌ Please enter a valid 6-digit OTP', 'error');
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = '⏳ Verifying...';
+      
+      fetch(API_BASE + '/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, otp: otp })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          showStatus('✓ Login successful!', 'success');
+          // Store user session
+          localStorage.setItem('user_email', userEmail);
+          localStorage.setItem('user_id', data.userId || Math.random().toString(36).substr(2, 9));
+          // Redirect or show success
+          setTimeout(() => {
+            alert('Welcome to YesPalm!');
+            location.reload();
+          }, 1000);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Verify & Login';
+          showStatus('❌ ' + (data.error || 'Invalid OTP'), 'error');
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.textContent = 'Verify & Login';
+        showStatus('❌ ' + err.message, 'error');
+        console.error('Error:', err);
+      });
+    }
+
+    function showStatus(msg, type) {
+      const statusDiv = document.getElementById('status-message');
+      if (!msg) {
+        statusDiv.innerHTML = '';
+        return;
+      }
+      statusDiv.innerHTML = `<div class="status-msg status-${type}">${msg}</div>`;
+    }
   </script>
 </body>
 </html>
