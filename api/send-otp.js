@@ -1,17 +1,29 @@
 // Vercel Serverless Function to send OTP via email
-// For production, use a service like SendGrid, Mailgun, or AWS SES
-
+// Uses Ethereal Email (Nodemailer's free testing service)
 const nodemailer = require('nodemailer');
 
-// For demo purposes, we'll use environment variables
-// Set these in Vercel dashboard: EMAIL_USER, EMAIL_PASS
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+// Create a transporter using Ethereal Email
+// Ethereal is a fake SMTP provider that doesn't require authentication
+// Perfect for testing email functionality
+let transporter;
+
+const initializeTransporter = async () => {
+  if (!transporter) {
+    // Create test account - this is a free service
+    const testAccount = await nodemailer.createTestAccount();
+    
+    transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false,
+      auth: {
+        user: testAccount.user,
+        pass: testAccount.pass,
+      },
+    });
   }
-});
+  return transporter;
+};
 
 export default async function handler(req, res) {
   // Handle CORS
@@ -26,42 +38,54 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  const { email, otp } = req.body;
-
-  if (!email || !otp) {
-    return res.status(400).json({ error: 'Email and OTP are required' });
+    res.status(405).json({ error: 'Method not allowed' });
+    return;
   }
 
   try {
-    const mailOptions = {
-      from: process.env.EMAIL_USER || 'noreply@yespalm.com',
-      to: email,
-      subject: 'YesPalm - Your OTP Verification Code',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center; border-radius: 10px 10px 0 0;">
-            <h1 style="color: white; margin: 0;">YesPalm</h1>
-            <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Anonymous Messaging</p>
-          </div>
-          <div style="background: #f9f9f9; padding: 40px; text-align: center; border-radius: 0 0 10px 10px;">
-            <h2 style="color: #333; margin-bottom: 20px;">Your OTP Verification Code</h2>
-            <p style="color: #666; margin-bottom: 30px;">Please use the following OTP to verify your email:</p>
-            <div style="background: white; border: 2px solid #667eea; padding: 20px; border-radius: 5px; margin-bottom: 30px;">
-              <span style="font-size: 32px; font-weight: bold; color: #667eea; letter-spacing: 5px;">${otp}</span>
-            </div>
-            <p style="color: #999; font-size: 12px; margin: 20px 0 0 0;">This OTP is valid for 10 minutes. Do not share this code with anyone.</p>
-          </div>
-        </div>
-      `
-    };
+    const { email } = req.body;
+    
+    if (!email) {
+      res.status(400).json({ error: 'Email is required' });
+      return;
+    }
 
-    await transporter.sendMail(mailOptions);
-    return res.status(200).json({ success: true, message: 'OTP sent successfully' });
+    // Generate a 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Initialize transporter
+    const mail = await initializeTransporter();
+    
+    // Send email with OTP
+    const info = await mail.sendMail({
+      from: '"YesPalm OTP" <noreply@yespalm.com>',
+      to: email,
+      subject: 'YesPalm - Your OTP Code',
+      html: `
+        <h2>YesPalm - Secure Login</h2>
+        <p>Your One-Time Password (OTP) is:</p>
+        <h1 style="color: #2e7d32; font-size: 32px; letter-spacing: 5px;">${otp}</h1>
+        <p>This code will expire in 10 minutes.</p>
+        <p><strong>Important:</strong> Never share this code with anyone.</p>
+        <hr />
+        <p><small>If you didn't request this code, please ignore this email.</small></p>
+      `,
+    });
+    
+    console.log('OTP sent successfully to', email);
+    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
+    
+    res.status(200).json({
+      success: true,
+      message: 'OTP sent successfully',
+      testMessageUrl: nodemailer.getTestMessageUrl(info),
+      otp: otp, // Include OTP in response for testing (remove in production)
+    });
   } catch (error) {
     console.error('Error sending email:', error);
-    return res.status(500).json({ error: 'Failed to send OTP', details: error.message });
+    res.status(500).json({
+      error: 'Failed to send OTP',
+      details: error.message,
+    });
   }
 }
