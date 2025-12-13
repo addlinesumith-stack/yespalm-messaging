@@ -5,6 +5,7 @@
   "main": "send-otp.js",
   "dependencies": {
     "nodemailer": "^6.9.1"
+        "twilio": "^4.10.0"
   },
   "devDependencies": {},
   "scripts": {
