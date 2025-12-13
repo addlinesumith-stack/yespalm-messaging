@@ -1,1 +1,22 @@
-{"name":"yespalm-messaging-api","version":"1.0.0","description":"API for YesPalm Anonymous Messaging","main":"send-otp.js","dependencies":{"@sendgrid/mail":"^8.1.0","nodemailer":"^6.9.1","twilio":"^4.10.0"},"devDependencies":{},"scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"keywords":["messaging","otp","email"],"author":"YesPalm","license":"MIT"}
+{
+  "name": "yespalm-messaging-api",
+  "version": "1.0.0",
+  "description": "API for YesPalm Anonymous Messaging",
+  "main": "send-otp.js",
+  "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
+    "@upstash/redis": "^1.25.0",
+    "nodemailer": "^6.9.1",
+    "twilio": "^4.10.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "messaging",
+    "otp",
+    "email"
+  ],
+  "author": "YesPalm",
+  "license": "MIT"
