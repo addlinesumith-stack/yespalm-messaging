@@ -1,29 +1,11 @@
 // Vercel Serverless Function to send OTP via email
-// Uses Ethereal Email (Nodemailer's free testing service)
-const nodemailer = require('nodemailer');
+// Uses SendGrid for production-grade email delivery
+const sgMail = require('@sendgrid/mail');
 
-// Create a transporter using Ethereal Email
-// Ethereal is a fake SMTP provider that doesn't require authentication
-// Perfect for testing email functionality
-let transporter;
-
-const initializeTransporter = async () => {
-  if (!transporter) {
-    // Create test account - this is a free service
-    const testAccount = await nodemailer.createTestAccount();
-    
-    transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
-    });
-  }
-  return transporter;
-};
+// Initialize SendGrid with API key from environment
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 export default async function handler(req, res) {
   // Handle CORS
@@ -50,42 +32,76 @@ export default async function handler(req, res) {
       return;
     }
 
+    // Check if SendGrid API key is configured
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('SendGrid API key not configured');
+      res.status(500).json({
+        error: 'Email service not configured',
+        message: 'SENDGRID_API_KEY environment variable is not set',
+      });
+      return;
+    }
+
     // Generate a 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     
-    // Initialize transporter
-    const mail = await initializeTransporter();
-    
-    // Send email with OTP
-    const info = await mail.sendMail({
-      from: '"YesPalm OTP" <noreply@yespalm.com>',
+    // Prepare email message
+    const msg = {
       to: email,
+      from: process.env.SENDGRID_FROM_EMAIL || 'noreply@yespalm.com',
       subject: 'YesPalm - Your OTP Code',
       html: `
-        <h2>YesPalm - Secure Login</h2>
-        <p>Your One-Time Password (OTP) is:</p>
-        <h1 style="color: #2e7d32; font-size: 32px; letter-spacing: 5px;">${otp}</h1>
-        <p>This code will expire in 10 minutes.</p>
-        <p><strong>Important:</strong> Never share this code with anyone.</p>
-        <hr />
-        <p><small>If you didn't request this code, please ignore this email.</small></p>
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background-color: #2e7d32; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
+            <h1 style="color: white; margin: 0;">🌴 YesPalm</h1>
+            <p style="color: #c8e6c9; margin: 5px 0 0 0;">Secure Anonymous Messaging</p>
+          </div>
+          <div style="background-color: #f5f5f5; padding: 30px; border-radius: 0 0 8px 8px;">
+            <h2 style="color: #2e7d32; margin-top: 0;">Secure Login</h2>
+            <p style="color: #666; font-size: 16px;">Your One-Time Password (OTP) is:</p>
+            <div style="background-color: white; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+              <h1 style="color: #2e7d32; font-size: 48px; letter-spacing: 8px; margin: 0; font-weight: bold; font-family: 'Courier New', monospace;">${otp}</h1>
+            </div>
+            <p style="color: #666; font-size: 14px;">
+              <strong>This code will expire in 10 minutes.</strong>
+            </p>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 20px 0; border-radius: 4px;">
+              <p style="color: #856404; margin: 0; font-weight: bold;">⚠️ Security Warning</p>
+              <p style="color: #856404; margin: 5px 0 0 0; font-size: 14px;">Never share this code with anyone. YesPalm support staff will never ask for your OTP.</p>
+            </div>
+            <p style="color: #999; font-size: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd;">
+              If you didn't request this code, please ignore this email or reset your account password immediately.
+            </p>
+          </div>
+          <div style="background-color: #2e7d32; color: white; padding: 15px; text-align: center; font-size: 12px; border-radius: 0;">
+            <p style="margin: 0;">© 2025 YesPalm. All rights reserved.</p>
+            <p style="margin: 5px 0 0 0;">This is an automated message, please do not reply.</p>
+          </div>
+        </div>
       `,
-    });
+    };
     
-    console.log('OTP sent successfully to', email);
-    console.log('Preview URL:', nodemailer.getTestMessageUrl(info));
+    // Send email via SendGrid
+    await sgMail.send(msg);
+    
+    console.log(`OTP sent successfully to ${email}`);
     
     res.status(200).json({
       success: true,
-      message: 'OTP sent successfully',
-      testMessageUrl: nodemailer.getTestMessageUrl(info),
-      otp: otp, // Include OTP in response for testing (remove in production)
+      message: 'OTP sent successfully to your email',
     });
   } catch (error) {
     console.error('Error sending email:', error);
+    
+    // Provide detailed error logging
+    if (error.response) {
+      console.error('SendGrid error response:', error.response.body);
+    }
+    
     res.status(500).json({
       error: 'Failed to send OTP',
-      details: error.message,
+      message: 'Unable to send OTP at this moment. Please try again later.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 }
