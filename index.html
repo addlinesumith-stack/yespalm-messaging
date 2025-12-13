@@ -76,12 +76,11 @@
       <div class="auth-mode">Email Based OTP Authentication</div>
       
       <div id="email-screen">
-        <input type="email" id="login-email" placeholder="Enter your email address" maxlength="50">
-        <button onclick="sendOTP()">Send OTP</button>
+            <input type="tel" id="login-mobile" placeholder="Enter your mobile number" maxlength="15"        <button onclick="sendOTP()">Send OTP</button>
       </div>
 
       <div id="otp-screen" class="hidden">
-        <div class="otp-message">Enter OTP sent to your email</div>
+        <div class="otp-message">Enter OTP sent to your mobile number</div>
         <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6" class="otp-input">
         <button onclick="verifyOTP()">Verify & Login</button>
         <div style="margin-top:15px;text-align:center;"><span class="resend" onclick="sendOTP()">↻ Resend OTP</span></div>
@@ -120,7 +119,7 @@
   <script>
     let currentUser=null,messages=[],currentRoom=null,generatedOTP="",userEmail="",STORAGE_KEY='yespalm_data';
     function initApp(){loadData();if(currentUser)showChatSection()}
-    function sendOTP(){const email=document.getElementById('login-email').value.trim();if(!email||!email.includes('@')){alert('Please enter valid email');return}userEmail=email;generatedOTP=Math.random().toString().substr(2,6);alert(`OTP sent to ${email}:\n\nYour OTP: ${generatedOTP}`);document.getElementById('email-screen').classList.add('hidden');document.getElementById('otp-screen').classList.remove('hidden')}
+    function sendOTP(){const mobile=document.getElementById('login-mobile').value.trim();if(!email||!email.includes('@')){alert('Please enter valid email');return}userEmail=email;generatedOTP=Math.random().toString().substr(2,6);alert(`OTP sent to ${email}:\n\nYour OTP: ${generatedOTP}`);document.getElementById('email-screen').classList.add('hidden');document.getElementById('otp-screen').classList.remove('hidden')}
     function verifyOTP(){const otp=document.getElementById('otp-input').value.trim();if(!otp||otp!==generatedOTP){alert('Invalid OTP');return}currentUser={id:generateRoomId(),email:userEmail,timestamp:new Date().getTime()};currentRoom=currentUser.id;messages=[];saveData();showChatSection()}
     function generateRoomId(){return'ROOM'+Math.random().toString(36).substr(2,9).toUpperCase()}
     function showChatSection(){document.getElementById('auth-section').classList.add('hidden');document.getElementById('chat-section').classList.remove('hidden');document.getElementById('user-info').textContent=`📧 ${currentUser.email}`;document.getElementById('room-id').textContent=`🏠 Your Room: ${currentRoom}`;displayMessages()}
@@ -129,7 +128,7 @@
     function displayMessages(){const container=document.getElementById('messages-container');if(messages.length===0){container.innerHTML='<div class="empty-state">🌱 No messages yet. Share your room ID with friends!</div>';return}container.innerHTML=messages.map(msg=>`<div class="message ${msg.sender==='user'?'sent':''}"><div>${msg.text}</div><div class="message-time">${formatTime(msg.timestamp)}</div></div>`).join('');container.scrollTop=container.scrollHeight}
     function formatTime(date){return new Date(date).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
     function handleEnter(event){if(event.key==='Enter')sendMessage()}
-    function logout(){currentUser=null;currentRoom=null;messages=[];localStorage.removeItem(STORAGE_KEY);document.getElementById('login-email').value='';document.getElementById('otp-input').value='';document.getElementById('email-screen').classList.remove('hidden');document.getElementById('otp-screen').classList.add('hidden');document.getElementById('auth-section').classList.remove('hidden');document.getElementById('chat-section').classList.add('hidden')}
+    function logout(){currentUser=null;currentRoom=null;messages=[];localStorage.removeItem(STORAGE_KEY);document.getElementById('login-mobile').value='';document.getElementById('otp-input').value='';document.getElementById('email-screen').classList.remove('hidden');document.getElementById('otp-screen').classList.add('hidden');document.getElementById('auth-section').classList.remove('hidden');document.getElementById('chat-section').classList.add('hidden')}
     function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify({user:currentUser,messages:messages,currentRoom:currentRoom}))}
     function loadData(){const saved=localStorage.getItem(STORAGE_KEY);if(saved){const data=JSON.parse(saved);currentUser=data.user;messages=data.messages||[];currentRoom=data.currentRoom||data.user?.id}}
     window.addEventListener('load',initApp);
