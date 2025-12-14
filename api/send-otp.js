@@ -82,6 +82,8 @@ export default async function handler(req, res) {
     
     // Send email via SendGrid
     await sgMail.send(msg);
+        // Store OTP in Redis
+    await storeOTPInRedis(email, otp);
     
     console.log(`OTP sent successfully to ${email}`);
     
