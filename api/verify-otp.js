@@ -5,10 +5,7 @@ const { Redis } = require('@upstash/redis');
 // In production, OTPs should be stored in Redis with TTL (Time To Live)
 
 // Initialize Redis client with Upstash
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN,
-});
+const redis = Redis.fromEnv()
 
 export default async function handler(req, res) {
   // CORS Headers
