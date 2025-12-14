@@ -1,8 +1,7 @@
 // Vercel Serverless Function to send OTP via email
 // Uses SendGrid for production-grade email delivery
 const sgMail = require('@sendgrid/mail');
-const redis = require('@upstash/redis');
-
+const { Redis } = require('@upstash/redis');
 // Initialize SendGrid with API key from environment
 if (process.env.SENDGRID_API_KEY) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -11,8 +10,7 @@ if (process.env.SENDGRID_API_KEY) {
 // Function to store OTP in Redis
 async function storeOTPInRedis(email, otp) {
   try {
-    const db = redis.Redis.fromEnv();
-    await db.setex(`otp:${email}`, 600, otp); // Store for 10 minutes
+ const db = Redis.fromEnv();    await db.setex(`otp:${email}`, 600, otp); // Store for 10 minutes
   } catch (error) {
     console.error('Error storing OTP in Redis:', error);
     // Don't throw, as Redis storage is optional
