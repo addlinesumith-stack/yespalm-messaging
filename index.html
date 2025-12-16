@@ -379,6 +379,15 @@
             document.getElementById('chatScreen').classList.add('hidden');
         }
 
+        // Listen for localStorage changes in other tabs
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'yespalm_messages' && currentRoomId) {
+                // Reload messages when another tab updates localStorage
+                loadMessages();
+                displayMessages();
+            }
+        });
+
         // Check if user was previously logged in
         window.addEventListener('load', function() {
             loadMessages();
