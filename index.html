@@ -1,207 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YesPalm - Anonymous Messaging</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a4d2e 0%, #2d6a4f 50%, #40916c 100%);
-      color: #2d3436;
-      min-height: 100vh;
-      position: relative;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: '🌴 🌴';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      font-size: 120px;
-      opacity: 0.08;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      pointer-events: none;
-      z-index: 0;
-      animation: sway 6s ease-in-out infinite;
-    }
-    @keyframes sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; }
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding: 20px 0;
-    }
-    .header h1 { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: 2px; margin-bottom: 5px; }
-    .header .user-info { font-size: 12px; color: #d4f1d4; text-transform: uppercase; }
-    .palmyra-icon { font-size: 40px; display: inline-block; animation: sway-palm 3s ease-in-out infinite; }
-    @keyframes sway-palm { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg); } 75% { transform: rotate(-2deg); } }
-    .section { background: rgba(255,255,255,.95); border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.15); border-left: 5px solid #2d6a4f; position: relative; overflow: hidden; flex: 1; display: flex; flex-direction: column; }
-    .section::before { content: '🌿'; position: absolute; top: -20px; right: -20px; font-size: 100px; opacity: .08; }
-    .section h2 { font-size: 20px; margin-bottom: 15px; font-weight: 700; color: #1a4d2e; }
-    .messages { flex: 1; overflow-y: auto; margin-bottom: 15px; padding: 10px; border: 2px solid #d0f0d0; border-radius: 10px; background: #fafff9; }
-    .message { padding: 12px; margin: 8px 0; background: #fff; border-left: 4px solid #2d6a4f; font-size: 13px; line-height: 1.4; border-radius: 8px; word-wrap: break-word; }
-    .message.sent { border-left-color: #52b788; background: #f0f8f0; text-align: right; }
-    .message-time { font-size: 10px; color: #95a895; margin-top: 4px; }
-    .empty-state { text-align: center; padding: 20px; color: #95a895; font-size: 13px; }
-    .input-section { display: flex; gap: 10px; margin-bottom: 10px; }
-    .input-section input { flex: 1; padding: 12px; border: 2px solid #d0f0d0; border-radius: 10px; font-size: 13px; background: #f8fff8; transition: all .3s ease; }
-    .input-section input:focus { outline: 0; border-color: #2d6a4f; background: #fff; box-shadow: 0 0 10px rgba(45,106,79,.2); }
-    .input-section button { padding: 12px 20px; background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; }
-    .input-section button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,106,79,.4); }
-    .logout-btn { background: linear-gradient(135deg, #d62828 0%, #f77f00 100%); padding: 8px 16px; font-size: 11px; }
-    .login-screen { display: flex; align-items: center; justify-content: center; }
-    .login-form { background: rgba(255,255,255,.95); border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,.15); width: 100%; max-width: 400px; }
-    .login-form h2 { font-size: 24px; margin-bottom: 30px; font-weight: 700; color: #1a4d2e; }
-    .login-form input { width: 100%; padding: 14px; margin-bottom: 20px; border: 2px solid #d0f0d0; border-radius: 10px; font-size: 14px; background: #f8fff8; }
-    .login-form button { width: 100%; padding: 14px; background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
-    .hidden { display: none !important; }
-    .status-msg { padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; font-weight: 600; background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YesPalm - Anonymous Messaging</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #135deg, #1a4d2e 0%, #2d6a4f 50%, #40916c 100%);
+            color: #2d3436;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '🌴 🌴';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-size: 120px;
+            opacity: 0.08;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+            position: absolute;
+            top: 30px;
+        }
+        .logo-text {
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .logo-subtitle {
+            font-size: 18px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .card-title {
+            color: #2d3436;
+            font-size: 28px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #2d6a4f;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #1b5e20;
+            line-height: 1.5;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 14px;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2d6a4f;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #2d6a4f;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1b4332;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #2d3436;
+        }
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        .messages-container {
+            background: #f5f5f5;
+            border-radius: 8px;
+            height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+        }
+        .message {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #2d6a4f;
+        }
+        .message-user {
+            font-weight: 700;
+            color: #2d6a4f;
+            font-size: 13px;
+        }
+        .message-text {
+            color: #333;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .message-time {
+            font-size: 12px;
+            color: #999;
+        }
+        .room-info {
+            background: #f0f7f4;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #c8e6c9;
+        }
+        .room-info-label {
+            font-size: 12px;
+            color: #1b5e20;
+            font-weight: 600;
+        }
+        .room-id-display {
+            font-size: 14px;
+            color: #2d6a4f;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            margin-top: 4px;
+        }
+        .hidden {
+            display: none;
+        }
+        .full-width {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div id="login-screen" class="login-screen">
-      <div class="login-form">
-        <h2>🌴 Enter YesPalm</h2>
-        <input type="text" id="username" placeholder="Enter any username" maxlength="50">
-        <button onclick="login()">Enter YesPalm</button>
-      </div>
+    <div class="logo">
+        <div class="logo-text">🌴 YesPalm</div>
+        <div class="logo-subtitle">Anonymous Messaging Rooms</div>
     </div>
 
-    <div id="chat-screen" class="hidden">
-      <div class="header">
-        <div class="palmyra-icon">🌴</div>
-        <h1>YesPalm</h1>
-        <div class="user-info" id="current-user">Welcome!</div>
-      </div>
+    <div class="container">
+        <!-- Login/Room Selection Screen -->
+        <div id="loginScreen" class="card">
+            <div class="card-title">🔐 Enter YesPalm</div>
+            
+            <div class="input-group">
+                <label for="username">Your Username</label>
+                <input type="text" id="username" placeholder="Enter any username" />
+            </div>
 
-      <div class="section">
-        <h2>💬 Messages</h2>
-        <div id="messages" class="messages">
-          <div class="empty-state">No messages yet. Start typing to send your first message!</div>
+            <div class="info-box">
+                💡 <strong>About YesPalm:</strong> Just like palm trees that stand tall and provide refuge under their shade, YesPalm offers a safe space for anonymous messaging. Connect securely with anyone, anytime.
+            </div>
+
+            <div class="input-group">
+                <label>Join a Room</label>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="createNewRoom()">Create New Room</button>
+                    <button class="btn-secondary" onclick="showJoinRoomInput()">Join Room</button>
+                </div>
+            </div>
+
+            <div id="joinRoomInputArea" class="hidden">
+                <div class="input-group">
+                    <label for="roomIdInput">Enter Room ID</label>
+                    <input type="text" id="roomIdInput" placeholder="Paste the room ID here" />
+                </div>
+                <button class="btn-primary full-width" onclick="joinRoom()">Join This Room</button>
+            </div>
         </div>
-        <div class="input-section">
-          <input type="text" id="message-input" placeholder="Type a message..." maxlength="200">
-          <button onclick="sendMessage()">Send</button>
-          <button class="logout-btn" onclick="logout()">Logout</button>
+
+        <!-- Chat Screen -->
+        <div id="chatScreen" class="card hidden">
+            <div class="card-title">💬 Messages</div>
+            
+            <div class="room-info">
+                <div class="room-info-label">📍 Current Room ID:</div>
+                <div class="room-id-display" id="displayRoomId">---</div>
+            </div>
+
+            <div class="input-group">
+                <label>👤 User: <span id="displayUsername" style="color: #2d6a4f; font-weight: 700;">---</span></label>
+            </div>
+
+            <div class="messages-container" id="messagesBox">No messages yet. Start typing!</div>
+            
+            <div class="input-group">
+                <textarea id="messageInput" placeholder="Type a message..." rows="3"></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" onclick="sendMessage()">Send</button>
+                <button class="btn-secondary" onclick="switchRoom()">Switch Room</button>
+                <button class="btn-secondary" onclick="logout()">Logout</button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script>
-    let username = '';
-    let messages = [];
+    <script>
+        let currentUsername = '';
+        let currentRoomId = '';
+        let messages = {};
 
-    function login() {
-      const inputUsername = document.getElementById('username').value.trim();
-      
-      if (!inputUsername || inputUsername.length < 2) {
-        alert('❌ Please enter a username (at least 2 characters)');
-        return;
-      }
-      
-      username = inputUsername;
-      localStorage.setItem('username', username);
-      localStorage.setItem('user_id', Math.random().toString(36).substr(2, 9));
-      localStorage.setItem('messages', JSON.stringify([]));
-      
-      showChatScreen();
-    }
+        function generateRoomId() {
+            return 'room-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
 
-    function sendMessage() {
-      const input = document.getElementById('message-input');
-      const text = input.value.trim();
-      
-      if (!text) return;
-      
-      const message = {
-        text: text,
-        username: username,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        sent: true
-      };
-      
-      messages.push(message);
-      localStorage.setItem('messages', JSON.stringify(messages));
-      displayMessages();
-      input.value = '';
-      input.focus();
-      scrollToBottom();
-    }
+        function createNewRoom() {
+            const username = document.getElementById('username').value.trim();
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            currentUsername = username;
+            currentRoomId = generateRoomId();
+            loadMessages();
+            showChatScreen();
+        }
 
-    function displayMessages() {
-      const messagesDiv = document.getElementById('messages');
-      
-      if (messages.length === 0) {
-        messagesDiv.innerHTML = '<div class="empty-state">No messages yet. Start typing!</div>';
-        return;
-      }
-      
-      messagesDiv.innerHTML = messages.map(msg => `
-        <div class="message ${msg.sent ? 'sent' : ''}">
-          <strong>${msg.username}</strong>: ${msg.text}
-          <div class="message-time">${msg.time}</div>
-        </div>
-      `).join('');
-    }
+        function showJoinRoomInput() {
+            document.getElementById('joinRoomInputArea').classList.toggle('hidden');
+        }
 
-    function scrollToBottom() {
-      const messagesDiv = document.getElementById('messages');
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+        function joinRoom() {
+            const username = document.getElementById('username').value.trim();
+            const roomId = document.getElementById('roomIdInput').value.trim();
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            if (!roomId) {
+                alert('Please enter a room ID');
+                return;
+            }
+            currentUsername = username;
+            currentRoomId = roomId;
+            loadMessages();
+            showChatScreen();
+        }
 
-    function showChatScreen() {
-      document.getElementById('login-screen').classList.add('hidden');
-      document.getElementById('chat-screen').classList.remove('hidden');
-      document.getElementById('current-user').textContent = '🌴 ' + username.toUpperCase();
-      displayMessages();
-      document.getElementById('message-input').focus();
-    }
+        function showChatScreen() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('chatScreen').classList.remove('hidden');
+            document.getElementById('displayUsername').textContent = currentUsername;
+            document.getElementById('displayRoomId').textContent = currentRoomId;
+            displayMessages();
+        }
 
-    function logout() {
-      username = '';
-      messages = [];
-      localStorage.removeItem('username');
-      localStorage.removeItem('messages');
-      document.getElementById('username').value = '';
-      document.getElementById('login-screen').classList.remove('hidden');
-      document.getElementById('chat-screen').classList.add('hidden');
-      document.getElementById('username').focus();
-    }
+        function sendMessage() {
+            const messageText = document.getElementById('messageInput').value.trim();
+            if (!messageText) {
+                alert('Please type a message');
+                return;
+            }
 
-    // Check if already logged in
-    window.addEventListener('load', function() {
-      const savedUsername = localStorage.getItem('username');
-      if (savedUsername) {
-        username = savedUsername;
-        const savedMessages = localStorage.getItem('messages');
-        messages = savedMessages ? JSON.parse(savedMessages) : [];
-        showChatScreen();
-      } else {
-        document.getElementById('username').focus();
-      }
-    });
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-    // Allow Enter key to send messages
-    document.addEventListener('keypress', function(event) {
-      if (event.key === 'Enter' && document.getElementById('message-input') === event.target) {
-        sendMessage();
-      }
-    });
+            const message = {
+                username: currentUsername,
+                text: messageText,
+                time: timeString
+            };
 
-    // Allow Enter key to login
-    document.addEventListener('keypress', function(event) {
-      if (event.key === 'Enter' && document.getElementById('username') === event.target) {
-        login();
-      }
-    });
-  </script>
+            if (!messages[currentRoomId]) {
+                messages[currentRoomId] = [];
+            }
+            messages[currentRoomId].push(message);
+            saveMessages();
+            document.getElementById('messageInput').value = '';
+            displayMessages();
+        }
+
+        function displayMessages() {
+            const messagesBox = document.getElementById('messagesBox');
+            const roomMessages = messages[currentRoomId] || [];
+            
+            if (roomMessages.length === 0) {
+                messagesBox.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">No messages yet. Start typing!</div>';
+                return;
+            }
+
+            messagesBox.innerHTML = roomMessages.map(msg => `
+                <div class="message">
+                    <div class="message-user">${msg.username}</div>
+                    <div class="message-text">${msg.text}</div>
+                    <div class="message-time">${msg.time}</div>
+                </div>
+            `).join('');
+            
+            messagesBox.scrollTop = messagesBox.scrollHeight;
+        }
+
+        function saveMessages() {
+            localStorage.setItem('yespalm_messages', JSON.stringify(messages));
+        }
+
+        function loadMessages() {
+            const saved = localStorage.getItem('yespalm_messages');
+            messages = saved ? JSON.parse(saved) : {};
+        }
+
+        function switchRoom() {
+            logout();
+        }
+
+        function logout() {
+            currentUsername = '';
+            currentRoomId = '';
+            document.getElementById('username').value = '';
+            document.getElementById('roomIdInput').value = '';
+            document.getElementById('joinRoomInputArea').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+            document.getElementById('chatScreen').classList.add('hidden');
+        }
+
+        // Check if user was previously logged in
+        window.addEventListener('load', function() {
+            loadMessages();
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+            }
+        });
+
+        // Allow Enter key to send messages
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && !event.shiftKey && document.getElementById('messageInput') === document.activeElement) {
+                sendMessage();
+            }
+        });
+    </script>
 </body>
 </html>
