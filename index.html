@@ -14,7 +14,25 @@
       position: relative;
       overflow-x: hidden;
     }
-    .container { max-width: 500px; margin: 0 auto; padding: 20px; }
+    /* Animated background with palm trees */
+    body::before {
+      content: '🌴 🌴';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 120px;
+      opacity: 0.08;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      pointer-events: none;
+      z-index: 0;
+      animation: sway 6s ease-in-out infinite;
+    }
+    @keyframes sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
+    .container { max-width: 500px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
     .header {
       text-align: center;
       margin-bottom: 40px;
@@ -32,9 +50,9 @@
       font-size: 60px;
       margin-bottom: 15px;
       display: block;
-      animation: sway 3s ease-in-out infinite;
+      animation: sway-palm 3s ease-in-out infinite;
     }
-    @keyframes sway { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(2deg); } }
+    @keyframes sway-palm { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg); } 75% { transform: rotate(-2deg); } }
     .tagline { font-size: 16px; color: #d4f1d4; font-weight: 400; letter-spacing: 1px; }
     .leaf { display: inline-block; margin: 0 8px; color: #52b788; }
     .section {
@@ -49,7 +67,18 @@
     }
     .section::before { content: '🌿'; position: absolute; top: -20px; right: -20px; font-size: 120px; opacity: .08; }
     .section h2 { font-size: 24px; margin-bottom: 30px; font-weight: 700; color: #1a4d2e; display: flex; align-items: center; gap: 10px; }
-    .auth-mode { text-align: center; margin-bottom: 25px; font-size: 14px; color: #52b788; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .auth-mode { text-align: center; margin-bottom: 15px; font-size: 13px; color: #52b788; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .palm-info {
+      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f6 100%);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border-left: 4px solid #52b788;
+      font-size: 13px;
+      color: #2d6a4f;
+      line-height: 1.6;
+    }
+    .palm-info strong { color: #1a4d2e; }
     input[type="tel"], input[type="text"], input[type="number"] {
       width: 100%;
       padding: 14px;
@@ -91,6 +120,8 @@
     .phone-input-group { display: flex; gap: 10px; }
     .country-code { width: 80px; }
     .phone-number { flex: 1; }
+    .footer-text { text-align: center; font-size: 12px; color: #d4f1d4; margin-top: 30px; line-height: 1.6; }
+    .footer-text strong { color: #a8d5ba; }
   </style>
 </head>
 <body>
@@ -104,6 +135,10 @@
     <div id="auth-section" class="section">
       <h2>🔐 Secure Login</h2>
       <div class="auth-mode">Mobile Number OTP Authentication</div>
+      
+      <div class="palm-info">
+        <strong>🌴 About YesPalm:</strong> Just like palm trees that stand tall and provide refuge under their shade, YesPalm offers a safe space for anonymous messaging. Connect securely with anyone, anytime.
+      </div>
       
       <div id="status-message"></div>
       
@@ -124,26 +159,28 @@
         </div>
       </div>
     </div>
+
+    <div class="footer-text">
+      <strong>🌳 Why Palm Trees Matter:</strong><br>
+      Palm trees symbolize peace, resilience, and protection. Just as they thrive in diverse environments, YesPalm thrives in providing secure, anonymous communication to everyone.
+    </div>
   </div>
 
   <script>
     let userPhone = '';
     const API_BASE = '/api';
 
-    // ===== SECURE OTP SENDING =====
     function sendOTP() {
       const countryCode = document.getElementById('country-code').value.trim();
       const mobileNumber = document.getElementById('mobile-number').value.trim();
       const statusDiv = document.getElementById('status-message');
       const btn = event.target;
       
-      // Validate country code
       if (!countryCode || countryCode.length < 2) {
         showStatus('❌ Please enter a valid country code', 'error');
         return;
       }
       
-      // Validate mobile number
       if (!mobileNumber || mobileNumber.length < 7) {
         showStatus('❌ Please enter a valid mobile number (at least 7 digits)', 'error');
         return;
@@ -155,7 +192,6 @@
       btn.textContent = '⏳ Sending OTP...';
       showStatus('');
       
-      // Generate OTP on frontend (will be overridden by backend)
       const frontendOTP = Math.random().toString().substr(2, 6);
       
       fetch(API_BASE + '/send-otp-sms', {
@@ -171,7 +207,6 @@
         if (data.success) {
           userPhone = fullPhoneNumber;
           showStatus('✓ OTP sent to ' + fullPhoneNumber, 'success');
-          // Hide phone screen, show OTP screen after 1 second
           setTimeout(() => {
             document.getElementById('phone-screen').classList.add('hidden');
             document.getElementById('otp-screen').classList.remove('hidden');
@@ -188,7 +223,6 @@
       });
     }
 
-    // ===== SECURE OTP VERIFICATION =====
     function verifyOTP() {
       const otp = document.getElementById('otp-input').value.trim();
       const btn = event.target;
@@ -210,12 +244,10 @@
       .then(data => {
         if (data.success) {
           showStatus('✓ Login successful!', 'success');
-          // Store user session
           localStorage.setItem('user_phone', userPhone);
           localStorage.setItem('user_id', data.userId || Math.random().toString(36).substr(2, 9));
-          // Redirect or show success
           setTimeout(() => {
-            alert('Welcome to YesPalm!');
+            alert('Welcome to YesPalm! 🌴');
             location.reload();
           }, 1000);
         } else {
