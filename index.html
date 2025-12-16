@@ -79,7 +79,7 @@
       line-height: 1.6;
     }
     .palm-info strong { color: #1a4d2e; }
-    input[type="tel"], input[type="text"], input[type="number"] {
+    input[type="text"], input[type="email"], input[type="number"] {
       width: 100%;
       padding: 14px;
       margin-bottom: 20px;
@@ -117,9 +117,6 @@
     .status-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
     .status-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
     .status-info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #2196f3; }
-    .phone-input-group { display: flex; gap: 10px; }
-    .country-code { width: 80px; }
-    .phone-number { flex: 1; }
     .footer-text { text-align: center; font-size: 12px; color: #d4f1d4; margin-top: 30px; line-height: 1.6; }
     .footer-text strong { color: #a8d5ba; }
   </style>
@@ -133,8 +130,8 @@
     </div>
 
     <div id="auth-section" class="section">
-      <h2>🔐 Secure Login</h2>
-      <div class="auth-mode">Mobile Number OTP Authentication</div>
+      <h2>🔐 Enter YesPalm</h2>
+      <div class="auth-mode">Username Login</div>
       
       <div class="palm-info">
         <strong>🌴 About YesPalm:</strong> Just like palm trees that stand tall and provide refuge under their shade, YesPalm offers a safe space for anonymous messaging. Connect securely with anyone, anytime.
@@ -142,22 +139,8 @@
       
       <div id="status-message"></div>
       
-      <div id="phone-screen">
-        <div class="phone-input-group">
-          <input type="text" id="country-code" class="country-code" placeholder="+91" value="+91" maxlength="4">
-          <input type="tel" id="mobile-number" class="phone-number" placeholder="Enter your mobile number" maxlength="10">
-        </div>
-        <button onclick="sendOTP()">Send OTP</button>
-      </div>
-
-      <div id="otp-screen" class="hidden">
-        <div style="font-size: 12px; color: #52b788; margin-bottom: 15px; font-weight: 600; text-transform: uppercase;">✓ OTP sent to your mobile</div>
-        <input type="text" id="otp-input" placeholder="Enter 6-digit OTP" maxlength="6">
-        <button onclick="verifyOTP()">Verify & Login</button>
-        <div style="margin-top: 15px; text-align: center;">
-          <span style="color: #2d6a4f; text-decoration: none; font-weight: 700; cursor: pointer; font-size: 12px;" onclick="sendOTP()">↻ Resend OTP</span>
-        </div>
-      </div>
+      <input type="text" id="username" placeholder="Enter any username" maxlength="50">
+      <button onclick="login()">Enter YesPalm</button>
     </div>
 
     <div class="footer-text">
@@ -167,103 +150,42 @@
   </div>
 
   <script>
-    let userPhone = '';
-    const API_BASE = '/api';
-
-    function sendOTP() {
-      const countryCode = document.getElementById('country-code').value.trim();
-      const mobileNumber = document.getElementById('mobile-number').value.trim();
-      const statusDiv = document.getElementById('status-message');
+    function login() {
+      const username = document.getElementById('username').value.trim();
       const btn = event.target;
+      const statusDiv = document.getElementById('status-message');
       
-      if (!countryCode || countryCode.length < 2) {
-        showStatus('❌ Please enter a valid country code', 'error');
+      if (!username || username.length < 2) {
+        showStatus('❌ Please enter a username (at least 2 characters)', 'error');
         return;
       }
       
-      if (!mobileNumber || mobileNumber.length < 7) {
-        showStatus('❌ Please enter a valid mobile number (at least 7 digits)', 'error');
+      if (username.length > 50) {
+        showStatus('❌ Username is too long (max 50 characters)', 'error');
         return;
       }
-      
-      const fullPhoneNumber = countryCode + mobileNumber;
       
       btn.disabled = true;
-      btn.textContent = '⏳ Sending OTP...';
+      btn.textContent = '⏳ Logging in...';
       showStatus('');
       
-      const frontendOTP = Math.random().toString().substr(2, 6);
-      
-      fetch(API_BASE + '/send-otp-sms', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: fullPhoneNumber, otp: frontendOTP })
-      })
-      .then(res => res.json())
-      .then(data => {
-        btn.disabled = false;
-        btn.textContent = 'Send OTP';
+      // Simulate login delay
+      setTimeout(() => {
+        showStatus('✓ Welcome to YesPalm, ' + username + '!', 'success');
         
-        if (data.success) {
-          userPhone = fullPhoneNumber;
-          showStatus('✓ OTP sent to ' + fullPhoneNumber, 'success');
-          setTimeout(() => {
-            document.getElementById('phone-screen').classList.add('hidden');
-            document.getElementById('otp-screen').classList.remove('hidden');
-          }, 500);
-        } else {
-          showStatus('❌ ' + (data.error || 'Failed to send OTP'), 'error');
-        }
-      })
-      .catch(err => {
-        btn.disabled = false;
-        btn.textContent = 'Send OTP';
-        showStatus('❌ Network error: ' + err.message, 'error');
-        console.error('Error:', err);
-      });
+        // Store user session
+        localStorage.setItem('username', username);
+        localStorage.setItem('user_id', Math.random().toString(36).substr(2, 9));
+        localStorage.setItem('login_time', new Date().toISOString());
+        
+        // Redirect or show success after 1.5 seconds
+        setTimeout(() => {
+          alert('🌴 Welcome to YesPalm! You\'re now in the anonymous messaging network.');
+          location.reload();
+        }, 1500);
+      }, 1000);
     }
-
-    function verifyOTP() {
-      const otp = document.getElementById('otp-input').value.trim();
-      const btn = event.target;
-      
-      if (!otp || otp.length !== 6) {
-        showStatus('❌ Please enter a valid 6-digit OTP', 'error');
-        return;
-      }
-      
-      btn.disabled = true;
-      btn.textContent = '⏳ Verifying...';
-      
-      fetch(API_BASE + '/verify-otp-sms', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone: userPhone, otp: otp })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          showStatus('✓ Login successful!', 'success');
-          localStorage.setItem('user_phone', userPhone);
-          localStorage.setItem('user_id', data.userId || Math.random().toString(36).substr(2, 9));
-          setTimeout(() => {
-            alert('Welcome to YesPalm! 🌴');
-            location.reload();
-          }, 1000);
-        } else {
-          btn.disabled = false;
-          btn.textContent = 'Verify & Login';
-          showStatus('❌ ' + (data.error || 'Invalid OTP'), 'error');
-        }
-      })
-      .catch(err => {
-        btn.disabled = false;
-        btn.textContent = 'Verify & Login';
-        showStatus('❌ ' + err.message, 'error');
-        console.error('Error:', err);
-      });
-    }
-
+    
     function showStatus(msg, type) {
       const statusDiv = document.getElementById('status-message');
       if (!msg) {
@@ -272,6 +194,15 @@
       }
       statusDiv.innerHTML = `<div class="status-msg status-${type}">${msg}</div>`;
     }
+    
+    // Allow Enter key to login
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('username').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          login();
+        }
+      });
+    });
   </script>
 </body>
 </html>
