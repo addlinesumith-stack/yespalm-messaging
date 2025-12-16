@@ -14,7 +14,6 @@
       position: relative;
       overflow-x: hidden;
     }
-    /* Animated background with palm trees */
     body::before {
       content: '🌴 🌴';
       position: fixed;
@@ -32,176 +31,176 @@
       animation: sway 6s ease-in-out infinite;
     }
     @keyframes sway { 0%, 100% { transform: rotate(-1deg); } 50% { transform: rotate(1deg); } }
-    .container { max-width: 500px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; height: 100vh; display: flex; flex-direction: column; }
     .header {
       text-align: center;
-      margin-bottom: 40px;
-      padding: 40px 0;
+      margin-bottom: 20px;
+      padding: 20px 0;
     }
-    .header h1 {
-      font-size: 48px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #fff;
-      text-shadow: 2px 2px 4px rgba(0,0,0,.3);
-      letter-spacing: 2px;
-    }
-    .palmyra-icon {
-      font-size: 60px;
-      margin-bottom: 15px;
-      display: block;
-      animation: sway-palm 3s ease-in-out infinite;
-    }
+    .header h1 { font-size: 36px; font-weight: 700; color: #fff; letter-spacing: 2px; margin-bottom: 5px; }
+    .header .user-info { font-size: 12px; color: #d4f1d4; text-transform: uppercase; }
+    .palmyra-icon { font-size: 40px; display: inline-block; animation: sway-palm 3s ease-in-out infinite; }
     @keyframes sway-palm { 0%,100% { transform: rotate(0deg); } 25% { transform: rotate(2deg); } 75% { transform: rotate(-2deg); } }
-    .tagline { font-size: 16px; color: #d4f1d4; font-weight: 400; letter-spacing: 1px; }
-    .leaf { display: inline-block; margin: 0 8px; color: #52b788; }
-    .section {
-      background: rgba(255,255,255,.95);
-      border-radius: 20px;
-      padding: 40px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.15);
-      border-left: 5px solid #2d6a4f;
-      position: relative;
-      overflow: hidden;
-    }
-    .section::before { content: '🌿'; position: absolute; top: -20px; right: -20px; font-size: 120px; opacity: .08; }
-    .section h2 { font-size: 24px; margin-bottom: 30px; font-weight: 700; color: #1a4d2e; display: flex; align-items: center; gap: 10px; }
-    .auth-mode { text-align: center; margin-bottom: 15px; font-size: 13px; color: #52b788; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-    .palm-info {
-      background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f6 100%);
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      border-left: 4px solid #52b788;
-      font-size: 13px;
-      color: #2d6a4f;
-      line-height: 1.6;
-    }
-    .palm-info strong { color: #1a4d2e; }
-    input[type="text"], input[type="email"], input[type="number"] {
-      width: 100%;
-      padding: 14px;
-      margin-bottom: 20px;
-      border: 2px solid #d0f0d0;
-      border-radius: 10px;
-      font-size: 14px;
-      font-family: inherit;
-      transition: all .3s ease;
-      background: #f8fff8;
-    }
-    input:focus { outline: 0; border-color: #2d6a4f; box-shadow: 0 0 10px rgba(45,106,79,.2); background: #fff; }
-    input::placeholder { color: #95a895; }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 15px rgba(45,106,79,.3);
-      position: relative;
-      overflow: hidden;
-    }
-    button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,106,79,.4); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .section { background: rgba(255,255,255,.95); border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.15); border-left: 5px solid #2d6a4f; position: relative; overflow: hidden; flex: 1; display: flex; flex-direction: column; }
+    .section::before { content: '🌿'; position: absolute; top: -20px; right: -20px; font-size: 100px; opacity: .08; }
+    .section h2 { font-size: 20px; margin-bottom: 15px; font-weight: 700; color: #1a4d2e; }
+    .messages { flex: 1; overflow-y: auto; margin-bottom: 15px; padding: 10px; border: 2px solid #d0f0d0; border-radius: 10px; background: #fafff9; }
+    .message { padding: 12px; margin: 8px 0; background: #fff; border-left: 4px solid #2d6a4f; font-size: 13px; line-height: 1.4; border-radius: 8px; word-wrap: break-word; }
+    .message.sent { border-left-color: #52b788; background: #f0f8f0; text-align: right; }
+    .message-time { font-size: 10px; color: #95a895; margin-top: 4px; }
+    .empty-state { text-align: center; padding: 20px; color: #95a895; font-size: 13px; }
+    .input-section { display: flex; gap: 10px; margin-bottom: 10px; }
+    .input-section input { flex: 1; padding: 12px; border: 2px solid #d0f0d0; border-radius: 10px; font-size: 13px; background: #f8fff8; transition: all .3s ease; }
+    .input-section input:focus { outline: 0; border-color: #2d6a4f; background: #fff; box-shadow: 0 0 10px rgba(45,106,79,.2); }
+    .input-section button { padding: 12px 20px; background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; }
+    .input-section button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(45,106,79,.4); }
+    .logout-btn { background: linear-gradient(135deg, #d62828 0%, #f77f00 100%); padding: 8px 16px; font-size: 11px; }
+    .login-screen { display: flex; align-items: center; justify-content: center; }
+    .login-form { background: rgba(255,255,255,.95); border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,.15); width: 100%; max-width: 400px; }
+    .login-form h2 { font-size: 24px; margin-bottom: 30px; font-weight: 700; color: #1a4d2e; }
+    .login-form input { width: 100%; padding: 14px; margin-bottom: 20px; border: 2px solid #d0f0d0; border-radius: 10px; font-size: 14px; background: #f8fff8; }
+    .login-form button { width: 100%; padding: 14px; background: linear-gradient(135deg, #2d6a4f 0%, #40916c 100%); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
     .hidden { display: none !important; }
-    .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; font-weight: 600; }
-    .status-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
-    .status-error { background: #ffebee; color: #c62828; border-left: 4px solid #f44336; }
-    .status-info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #2196f3; }
-    .footer-text { text-align: center; font-size: 12px; color: #d4f1d4; margin-top: 30px; line-height: 1.6; }
-    .footer-text strong { color: #a8d5ba; }
+    .status-msg { padding: 10px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; font-weight: 600; background: #e8f5e9; color: #2e7d32; border-left: 4px solid #4caf50; }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <div class="palmyra-icon">🌴</div>
-      <h1>YesPalm</h1>
-      <p class="tagline"><span class="leaf">🍃</span>Anonymous Messaging<span class="leaf">🍃</span></p>
-    </div>
-
-    <div id="auth-section" class="section">
-      <h2>🔐 Enter YesPalm</h2>
-      <div class="auth-mode">Username Login</div>
-      
-      <div class="palm-info">
-        <strong>🌴 About YesPalm:</strong> Just like palm trees that stand tall and provide refuge under their shade, YesPalm offers a safe space for anonymous messaging. Connect securely with anyone, anytime.
+    <div id="login-screen" class="login-screen">
+      <div class="login-form">
+        <h2>🌴 Enter YesPalm</h2>
+        <input type="text" id="username" placeholder="Enter any username" maxlength="50">
+        <button onclick="login()">Enter YesPalm</button>
       </div>
-      
-      <div id="status-message"></div>
-      
-      <input type="text" id="username" placeholder="Enter any username" maxlength="50">
-      <button onclick="login()">Enter YesPalm</button>
     </div>
 
-    <div class="footer-text">
-      <strong>🌳 Why Palm Trees Matter:</strong><br>
-      Palm trees symbolize peace, resilience, and protection. Just as they thrive in diverse environments, YesPalm thrives in providing secure, anonymous communication to everyone.
+    <div id="chat-screen" class="hidden">
+      <div class="header">
+        <div class="palmyra-icon">🌴</div>
+        <h1>YesPalm</h1>
+        <div class="user-info" id="current-user">Welcome!</div>
+      </div>
+
+      <div class="section">
+        <h2>💬 Messages</h2>
+        <div id="messages" class="messages">
+          <div class="empty-state">No messages yet. Start typing to send your first message!</div>
+        </div>
+        <div class="input-section">
+          <input type="text" id="message-input" placeholder="Type a message..." maxlength="200">
+          <button onclick="sendMessage()">Send</button>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
+    let username = '';
+    let messages = [];
+
     function login() {
-      const username = document.getElementById('username').value.trim();
-      const btn = event.target;
-      const statusDiv = document.getElementById('status-message');
+      const inputUsername = document.getElementById('username').value.trim();
       
-      if (!username || username.length < 2) {
-        showStatus('❌ Please enter a username (at least 2 characters)', 'error');
+      if (!inputUsername || inputUsername.length < 2) {
+        alert('❌ Please enter a username (at least 2 characters)');
         return;
       }
       
-      if (username.length > 50) {
-        showStatus('❌ Username is too long (max 50 characters)', 'error');
-        return;
-      }
+      username = inputUsername;
+      localStorage.setItem('username', username);
+      localStorage.setItem('user_id', Math.random().toString(36).substr(2, 9));
+      localStorage.setItem('messages', JSON.stringify([]));
       
-      btn.disabled = true;
-      btn.textContent = '⏳ Logging in...';
-      showStatus('');
-      
-      // Simulate login delay
-      setTimeout(() => {
-        showStatus('✓ Welcome to YesPalm, ' + username + '!', 'success');
-        
-        // Store user session
-        localStorage.setItem('username', username);
-        localStorage.setItem('user_id', Math.random().toString(36).substr(2, 9));
-        localStorage.setItem('login_time', new Date().toISOString());
-        
-        // Redirect or show success after 1.5 seconds
-        setTimeout(() => {
-          alert('🌴 Welcome to YesPalm! You\'re now in the anonymous messaging network.');
-          location.reload();
-        }, 1500);
-      }, 1000);
+      showChatScreen();
     }
-    
-    function showStatus(msg, type) {
-      const statusDiv = document.getElementById('status-message');
-      if (!msg) {
-        statusDiv.innerHTML = '';
+
+    function sendMessage() {
+      const input = document.getElementById('message-input');
+      const text = input.value.trim();
+      
+      if (!text) return;
+      
+      const message = {
+        text: text,
+        username: username,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        sent: true
+      };
+      
+      messages.push(message);
+      localStorage.setItem('messages', JSON.stringify(messages));
+      displayMessages();
+      input.value = '';
+      input.focus();
+      scrollToBottom();
+    }
+
+    function displayMessages() {
+      const messagesDiv = document.getElementById('messages');
+      
+      if (messages.length === 0) {
+        messagesDiv.innerHTML = '<div class="empty-state">No messages yet. Start typing!</div>';
         return;
       }
-      statusDiv.innerHTML = `<div class="status-msg status-${type}">${msg}</div>`;
+      
+      messagesDiv.innerHTML = messages.map(msg => `
+        <div class="message ${msg.sent ? 'sent' : ''}">
+          <strong>${msg.username}</strong>: ${msg.text}
+          <div class="message-time">${msg.time}</div>
+        </div>
+      `).join('');
     }
-    
+
+    function scrollToBottom() {
+      const messagesDiv = document.getElementById('messages');
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showChatScreen() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('chat-screen').classList.remove('hidden');
+      document.getElementById('current-user').textContent = '🌴 ' + username.toUpperCase();
+      displayMessages();
+      document.getElementById('message-input').focus();
+    }
+
+    function logout() {
+      username = '';
+      messages = [];
+      localStorage.removeItem('username');
+      localStorage.removeItem('messages');
+      document.getElementById('username').value = '';
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('chat-screen').classList.add('hidden');
+      document.getElementById('username').focus();
+    }
+
+    // Check if already logged in
+    window.addEventListener('load', function() {
+      const savedUsername = localStorage.getItem('username');
+      if (savedUsername) {
+        username = savedUsername;
+        const savedMessages = localStorage.getItem('messages');
+        messages = savedMessages ? JSON.parse(savedMessages) : [];
+        showChatScreen();
+      } else {
+        document.getElementById('username').focus();
+      }
+    });
+
+    // Allow Enter key to send messages
+    document.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter' && document.getElementById('message-input') === event.target) {
+        sendMessage();
+      }
+    });
+
     // Allow Enter key to login
-    document.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('username').addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-          login();
-        }
-      });
+    document.addEventListener('keypress', function(event) {
+      if (event.key === 'Enter' && document.getElementById('username') === event.target) {
+        login();
+      }
     });
   </script>
 </body>
