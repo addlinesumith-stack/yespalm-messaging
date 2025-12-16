@@ -5,14 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YesPalm - Anonymous Messaging</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #135deg, #1a4d2e 0%, #2d6a4f 50%, #40916c 100%);
+            background: linear-gradient(135deg, #1a4d2e 0%, #2d6a4f 50%, #40916c 100%);
             color: #2d3436;
             min-height: 100vh;
             position: relative;
@@ -20,203 +16,74 @@
         }
         body::before {
             content: '🌴 🌴';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            font-size: 120px;
-            opacity: 0.08;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            pointer-events: none;
-            z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            font-size: 120px; opacity: 0.08; display: flex; justify-content: space-around; align-items: center;
+            pointer-events: none; z-index: -1;
         }
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-            position: absolute;
-            top: 30px;
-        }
-        .logo-text {
-            font-size: 48px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        .logo-subtitle {
-            font-size: 18px;
-            color: rgba(255,255,255,0.9);
-            margin-top: 10px;
-        }
+        .container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .logo { text-align: center; margin-bottom: 30px; position: absolute; top: 30px; }
+        .logo-text { font-size: 48px; font-weight: bold; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .logo-subtitle { font-size: 18px; color: rgba(255,255,255,0.9); margin-top: 10px; }
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            width: 100%;
-            max-width: 500px;
+            background: white; border-radius: 15px; padding: 40px; width: 100%; max-width: 500px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-        .card-title {
-            color: #2d3436;
-            font-size: 28px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .card-title { color: #2d3436; font-size: 28px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
         .info-box {
-            background: #e8f5e9;
-            border-left: 4px solid #2d6a4f;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            color: #1b5e20;
-            line-height: 1.5;
+            background: #e8f5e9; border-left: 4px solid #2d6a4f; padding: 15px; margin-bottom: 20px;
+            border-radius: 5px; font-size: 14px; color: #1b5e20; line-height: 1.5;
         }
-        .input-group {
-            margin-bottom: 20px;
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #2d3436; font-size: 14px; }
+        input, textarea {
+            width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;
+            font-family: inherit; font-size: 14px; transition: border-color 0.3s;
         }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2d3436;
-            font-size: 14px;
-        }
-        input[type="text"],
-        input[type="number"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #2d6a4f;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
+        input:focus, textarea:focus { outline: none; border-color: #2d6a4f; }
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
         button {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+            flex: 1; padding: 12px 20px; border: none; border-radius: 8px; font-size: 14px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s;
         }
-        .btn-primary {
-            background: #2d6a4f;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #1b4332;
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #2d3436;
-        }
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
+        .btn-primary { background: #2d6a4f; color: white; }
+        .btn-primary:hover { background: #1b4332; transform: translateY(-2px); }
+        .btn-secondary { background: #e0e0e0; color: #2d3436; }
+        .btn-secondary:hover { background: #d0d0d0; }
         .messages-container {
-            background: #f5f5f5;
-            border-radius: 8px;
-            height: 300px;
-            overflow-y: auto;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 2px solid #e0e0e0;
+            background: #f5f5f5; border-radius: 8px; height: 300px; overflow-y: auto; padding: 15px;
+            margin-bottom: 15px; border: 2px solid #e0e0e0;
         }
         .message {
-            background: white;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
+            background: white; padding: 12px; margin-bottom: 10px; border-radius: 8px;
             border-left: 4px solid #2d6a4f;
         }
-        .message-user {
-            font-weight: 700;
-            color: #2d6a4f;
-            font-size: 13px;
-        }
-        .message-text {
-            color: #333;
-            margin: 5px 0;
-            font-size: 14px;
-        }
-        .message-time {
-            font-size: 12px;
-            color: #999;
-        }
-        .room-info {
-            background: #f0f7f4;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #c8e6c9;
-        }
-        .room-info-label {
-            font-size: 12px;
-            color: #1b5e20;
-            font-weight: 600;
-        }
-        .room-id-display {
-            font-size: 14px;
-            color: #2d6a4f;
-            font-weight: 700;
-            font-family: 'Courier New', monospace;
-            margin-top: 4px;
-        }
-        .hidden {
-            display: none;
-        }
-        .full-width {
-            width: 100%;
-        }
+        .message-user { font-weight: 700; color: #2d6a4f; font-size: 13px; }
+        .message-text { color: #333; margin: 5px 0; font-size: 14px; }
+        .message-time { font-size: 12px; color: #999; }
+        .room-info { background: #f0f7f4; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c8e6c9; }
+        .room-info-label { font-size: 12px; color: #1b5e20; font-weight: 600; }
+        .room-id-display { font-size: 14px; color: #2d6a4f; font-weight: 700; font-family: 'Courier New', monospace; margin-top: 4px; }
+        .hidden { display: none; }
+        .full-width { width: 100%; }
+        .loading { text-align: center; color: #999; padding: 20px; }
     </style>
 </head>
 <body>
     <div class="logo">
         <div class="logo-text">🌴 YesPalm</div>
-        <div class="logo-subtitle">Anonymous Messaging Rooms</div>
+        <div class="logo-subtitle">Real-Time Anonymous Messaging</div>
     </div>
 
     <div class="container">
-        <!-- Login/Room Selection Screen -->
         <div id="loginScreen" class="card">
             <div class="card-title">🔐 Enter YesPalm</div>
-            
             <div class="input-group">
-                <label for="username">Your Username</label>
+                <label>Your Username</label>
                 <input type="text" id="username" placeholder="Enter any username" />
             </div>
-
             <div class="info-box">
-                💡 <strong>About YesPalm:</strong> Just like palm trees that stand tall and provide refuge under their shade, YesPalm offers a safe space for anonymous messaging. Connect securely with anyone, anytime.
+                💡 <strong>About YesPalm:</strong> Real-time anonymous messaging across all browsers! Connect with anyone using a room ID.
             </div>
-
             <div class="input-group">
                 <label>Join a Room</label>
                 <div class="button-group">
@@ -224,35 +91,30 @@
                     <button class="btn-secondary" onclick="showJoinRoomInput()">Join Room</button>
                 </div>
             </div>
-
             <div id="joinRoomInputArea" class="hidden">
                 <div class="input-group">
-                    <label for="roomIdInput">Enter Room ID</label>
+                    <label>Enter Room ID</label>
                     <input type="text" id="roomIdInput" placeholder="Paste the room ID here" />
                 </div>
                 <button class="btn-primary full-width" onclick="joinRoom()">Join This Room</button>
             </div>
         </div>
 
-        <!-- Chat Screen -->
         <div id="chatScreen" class="card hidden">
             <div class="card-title">💬 Messages</div>
-            
             <div class="room-info">
                 <div class="room-info-label">📍 Current Room ID:</div>
                 <div class="room-id-display" id="displayRoomId">---</div>
             </div>
-
             <div class="input-group">
                 <label>👤 User: <span id="displayUsername" style="color: #2d6a4f; font-weight: 700;">---</span></label>
             </div>
-
-            <div class="messages-container" id="messagesBox">No messages yet. Start typing!</div>
-            
+            <div class="messages-container" id="messagesBox">
+                <div class="loading">Connecting to Firebase...</div>
+            </div>
             <div class="input-group">
                 <textarea id="messageInput" placeholder="Type a message..." rows="3"></textarea>
             </div>
-
             <div class="button-group">
                 <button class="btn-primary" onclick="sendMessage()">Send</button>
                 <button class="btn-secondary" onclick="switchRoom()">Switch Room</button>
@@ -261,10 +123,26 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBQZ_X5H8M7L2P9K3N5Q2R4S6T7U8V9W0X",
+            authDomain: "yespalm-messaging.firebaseapp.com",
+            databaseURL: "https://yespalm-messaging-default-rtdb.asia-southeast1.firebaseapp.com",
+            projectId: "yespalm-messaging",
+            storageBucket: "yespalm-messaging.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
         let currentUsername = '';
         let currentRoomId = '';
-        let messages = {};
+        let messagesListener = null;
 
         function generateRoomId() {
             return 'room-' + Math.random().toString(36).substr(2, 9).toUpperCase();
@@ -278,8 +156,8 @@
             }
             currentUsername = username;
             currentRoomId = generateRoomId();
-            loadMessages();
             showChatScreen();
+            loadMessages();
         }
 
         function showJoinRoomInput() {
@@ -299,8 +177,8 @@
             }
             currentUsername = username;
             currentRoomId = roomId;
-            loadMessages();
             showChatScreen();
+            loadMessages();
         }
 
         function showChatScreen() {
@@ -308,7 +186,36 @@
             document.getElementById('chatScreen').classList.remove('hidden');
             document.getElementById('displayUsername').textContent = currentUsername;
             document.getElementById('displayRoomId').textContent = currentRoomId;
-            displayMessages();
+        }
+
+        function loadMessages() {
+            if (messagesListener) {
+                messagesListener();
+            }
+
+            const messagesRef = ref(database, `rooms/${currentRoomId}/messages`);
+            const messagesQuery = query(messagesRef, orderByChild('timestamp'), limitToLast(50));
+
+            messagesListener = onValue(messagesQuery, (snapshot) => {
+                const messagesBox = document.getElementById('messagesBox');
+                const data = snapshot.val();
+
+                if (!data) {
+                    messagesBox.innerHTML = '<div class="loading">No messages yet. Start typing!</div>';
+                    return;
+                }
+
+                const messages = Object;
+.values(data).sort((a, b) => a.timestamp - b.timestamp);
+                messagesBox.innerHTML = messages.map(msg => `
+                    <div class="message">
+                        <div class="message-user">${msg.username}</div>
+                        <div class="message-text">${msg.text}</div>
+                        <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+                `).join('');
+                messagesBox.scrollTop = messagesBox.scrollHeight;
+            });
         }
 
         function sendMessage() {
@@ -318,51 +225,14 @@
                 return;
             }
 
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
-            const message = {
+            const messagesRef = ref(database, `rooms/${currentRoomId}/messages`);
+            push(messagesRef, {
                 username: currentUsername,
                 text: messageText,
-                time: timeString
-            };
+                timestamp: Date.now()
+            });
 
-            if (!messages[currentRoomId]) {
-                messages[currentRoomId] = [];
-            }
-            messages[currentRoomId].push(message);
-            saveMessages();
             document.getElementById('messageInput').value = '';
-            displayMessages();
-        }
-
-        function displayMessages() {
-            const messagesBox = document.getElementById('messagesBox');
-            const roomMessages = messages[currentRoomId] || [];
-            
-            if (roomMessages.length === 0) {
-                messagesBox.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;">No messages yet. Start typing!</div>';
-                return;
-            }
-
-            messagesBox.innerHTML = roomMessages.map(msg => `
-                <div class="message">
-                    <div class="message-user">${msg.username}</div>
-                    <div class="message-text">${msg.text}</div>
-                    <div class="message-time">${msg.time}</div>
-                </div>
-            `).join('');
-            
-            messagesBox.scrollTop = messagesBox.scrollHeight;
-        }
-
-        function saveMessages() {
-            localStorage.setItem('yespalm_messages', JSON.stringify(messages));
-        }
-
-        function loadMessages() {
-            const saved = localStorage.getItem('yespalm_messages');
-            messages = saved ? JSON.parse(saved) : {};
         }
 
         function switchRoom() {
@@ -370,6 +240,9 @@
         }
 
         function logout() {
+            if (messagesListener) {
+                messagesListener();
+            }
             currentUsername = '';
             currentRoomId = '';
             document.getElementById('username').value = '';
@@ -379,25 +252,6 @@
             document.getElementById('chatScreen').classList.add('hidden');
         }
 
-        // Listen for localStorage changes in other tabs
-        window.addEventListener('storage', function(event) {
-            if (event.key === 'yespalm_messages' && currentRoomId) {
-                // Reload messages when another tab updates localStorage
-                loadMessages();
-                displayMessages();
-            }
-        });
-
-        // Check if user was previously logged in
-        window.addEventListener('load', function() {
-            loadMessages();
-            const savedUsername = localStorage.getItem('username');
-            if (savedUsername) {
-                document.getElementById('username').value = savedUsername;
-            }
-        });
-
-        // Allow Enter key to send messages
         document.addEventListener('keypress', function(event) {
             if (event.key === 'Enter' && !event.shiftKey && document.getElementById('messageInput') === document.activeElement) {
                 sendMessage();
